@@ -4,7 +4,7 @@ description: >
   This blueprint creates a Kubernetes Cluster.
 
 imports:
-  - http://www.getcloudify.org/spec/cloudify/4.3.1/types.yaml
+  - http://www.getcloudify.org/spec/cloudify/4.3/types.yaml
   - plugin:cloudify-diamond-plugin
   - plugin:cloudify-fabric-plugin
   - plugin:cloudify-utilities-plugin
@@ -67,11 +67,10 @@ inputs:
     default: { get_attribute: [  k8s_master_host, networkInterfaces, 0, accessConfigs, 0, natIP ] }
 
   ks_node_dep_archive:
-    default: https://github.com/cloudify-incubator/kubernetes-node-blueprints/archive/master.zip
+    default: resources/kubernetes-node-blueprints.tar.gz
 
   ks_load_dep_archive:
-    default: https://github.com/cloudify-incubator/kubernetes-lb-blueprints/archive/master.zip
-
+    default: resources/kubernetes-lb-blueprints.tar.gz
 
 dsl_definitions:
 
@@ -252,6 +251,8 @@ node_templates:
         target: ssh_fw
       - type: cloudify.relationships.depends_on
         target: kubernetes_master
+      - type: cloudify.relationships.depends_on
+        target: kubernetes_cni
 
   k8s_load:
     type: cloudify.nodes.DeploymentProxy
@@ -281,6 +282,8 @@ node_templates:
         target: ssh_fw
       - type: cloudify.relationships.depends_on
         target: kubernetes_master
+      - type: cloudify.relationships.depends_on
+        target: kubernetes_cni
 
 outputs:
 

@@ -8,6 +8,7 @@ imports:
   - plugin:cloudify-diamond-plugin
   - plugin:cloudify-fabric-plugin
   - plugin:cloudify-utilities-plugin
+  - plugin:cloudify-kubernetes-plugin
   - plugin:cloudify-vsphere-plugin
   - imports/kubernetes.yaml
 
@@ -89,10 +90,10 @@ inputs:
     default: { get_attribute: [ kubernetes_host, ip ] }
 
   ks_node_dep_archive:
-    default: https://github.com/cloudify-incubator/kubernetes-node-blueprints/archive/master.zip
+    default: https://s3.us-east-2.amazonaws.com/aws-cloudify-blueprint/kubernetes-node-blueprints-master.zip
 
   ks_load_dep_archive:
-    default: https://github.com/cloudify-incubator/kubernetes-lb-blueprints/archive/master.zip
+    default: https://s3.us-east-2.amazonaws.com/aws-cloudify-blueprint/kubernetes-lb-blueprints-master.zip
 
 dsl_definitions:
 
@@ -178,6 +179,8 @@ node_templates:
         target: k8s_master_host_service
       - type: cloudify.relationships.depends_on
         target: kubernetes_master
+      - type: cloudify.relationships.depends_on
+        target: kubernetes_cni
 
   k8s_load:
     type: cloudify.nodes.DeploymentProxy
@@ -200,6 +203,8 @@ node_templates:
         target: k8s_node
       - type: cloudify.relationships.depends_on
         target: kubernetes_master
+      - type: cloudify.relationships.depends_on
+        target: kubernetes_cni
 
 outputs:
 

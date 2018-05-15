@@ -32,11 +32,10 @@ inputs:
     default: { get_attribute: [ kubernetes_master_ip, floating_ip_address ] }
 
   ks_node_dep_archive:
-    default: https://github.com/cloudify-incubator/kubernetes-node-blueprints/archive/master.zip
+    default: https://s3.us-east-2.amazonaws.com/aws-cloudify-blueprint/kubernetes-node-blueprints-master.zip
 
   ks_load_dep_archive:
-    default: https://github.com/cloudify-incubator/kubernetes-lb-blueprints/archive/master.zip
-
+    default: https://s3.us-east-2.amazonaws.com/aws-cloudify-blueprint/kubernetes-lb-blueprints-master.zip
 
 dsl_definitions:
 
@@ -209,6 +208,8 @@ node_templates:
         target: kubernetes_security_group
       - type: cloudify.relationships.depends_on
         target: kubernetes_master
+      - type: cloudify.relationships.depends_on
+        target: kubernetes_cni
 
   k8s_load:
     type: cloudify.nodes.DeploymentProxy
@@ -235,6 +236,8 @@ node_templates:
         target: kubernetes_security_group
       - type: cloudify.relationships.depends_on
         target: kubernetes_master
+      - type: cloudify.relationships.depends_on
+        target: kubernetes_cni
 
 outputs:
 
