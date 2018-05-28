@@ -178,9 +178,7 @@ node_templates:
       - type: cloudify.relationships.depends_on
         target: k8s_master_host_service
       - type: cloudify.relationships.depends_on
-        target: kubernetes_master
-      - type: cloudify.relationships.depends_on
-        target: kubernetes_cni
+        target: kubernetes_setup_master
 
   k8s_load:
     type: cloudify.nodes.DeploymentProxy
@@ -202,9 +200,7 @@ node_templates:
       - type: cloudify.relationships.depends_on
         target: k8s_node
       - type: cloudify.relationships.depends_on
-        target: kubernetes_master
-      - type: cloudify.relationships.depends_on
-        target: kubernetes_cni
+        target: kubernetes_setup_master
 
 outputs:
 

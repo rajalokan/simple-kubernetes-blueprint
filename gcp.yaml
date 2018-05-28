@@ -183,6 +183,7 @@ node_templates:
           - 6443
           - 6783
           - 6784
+          - 8285
       sources:
         - 0.0.0.0/0
       additional_settings:
@@ -250,9 +251,7 @@ node_templates:
       - type: cloudify.relationships.depends_on
         target: ssh_fw
       - type: cloudify.relationships.depends_on
-        target: kubernetes_master
-      - type: cloudify.relationships.depends_on
-        target: kubernetes_cni
+        target: kubernetes_setup_master
 
   k8s_load:
     type: cloudify.nodes.DeploymentProxy
@@ -281,9 +280,7 @@ node_templates:
       - type: cloudify.relationships.depends_on
         target: ssh_fw
       - type: cloudify.relationships.depends_on
-        target: kubernetes_master
-      - type: cloudify.relationships.depends_on
-        target: kubernetes_cni
+        target: kubernetes_setup_master
 
 outputs:
 

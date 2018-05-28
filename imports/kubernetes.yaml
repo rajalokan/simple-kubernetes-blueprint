@@ -69,14 +69,6 @@ node_types:
 
 node_templates:
 
-  kubernetes_master:
-    type: cloudify.nodes.Root
-    relationships:
-      - type: cloudify.relationships.depends_on
-        target: kubernetes_setup_master
-      - type: cloudify.relationships.depends_on
-        target: kubernetes_config_master
-
   kubernetes_setup_master:
     type: cloudify.nodes.Kubernetes.Setup.Master
     relationships:
@@ -88,10 +80,12 @@ node_templates:
     relationships:
       - type: cloudify.relationships.depends_on
         target: kubernetes_setup_master
-      - type: cloudify.relationships.depends_on
-        target: kubernetes_cni
       - type: cloudify.relationships.contained_in
         target: k8s_master_host
+      - target: k8s_node
+        type: cloudify.relationships.depends_on
+      - target: k8s_load
+        type: cloudify.relationships.depends_on
 
   kubernetes_master_services:
     type: cloudify.nodes.ApplicationServer.kubernetes.Node
@@ -101,7 +95,9 @@ node_templates:
           inputs:
             full_install: all
     relationships:
-      - target: kubernetes_master
+      - target: kubernetes_setup_master
+        type: cloudify.relationships.depends_on
+      - target: kubernetes_config_master
         type: cloudify.relationships.depends_on
       - target: k8s_master_host
         type: cloudify.relationships.contained_in

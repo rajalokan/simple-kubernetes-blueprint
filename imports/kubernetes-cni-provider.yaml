@@ -9,7 +9,7 @@ inputs:
     default: { get_input: kubernetes_cni_blueprint_id }
 
   kubernetes_cni_provider_blueprint:
-    default: flannel.yaml
+    default: weave.yaml
 
   kubernetes_cni_blueprint_archive:
     default: resources/kubernetes-cni-provider-archive.tar.gz
@@ -30,4 +30,4 @@ node_templates:
             agent_user: { get_input: agent_user }
     relationships:
     - type: cloudify.relationships.depends_on
-      target: kubernetes_setup_master
+      target: k8s_node
