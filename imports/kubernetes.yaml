@@ -29,6 +29,9 @@ node_types:
           implementation: scripts/kubernetes_master/create.py
         configure:
           implementation: scripts/kubernetes_master/configure.py
+          inputs:
+            cni-provider-blueprint:
+              default: { get_input: kubernetes_cni_provider_blueprint }
 
   cloudify.nodes.Kubernetes.Config.Master:
     derived_from: cloudify.nodes.Root

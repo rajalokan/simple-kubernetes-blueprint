@@ -16,6 +16,7 @@ except ImportError:
 
 from cloudify import manager
 from cloudify import ctx
+from cloudify.state import ctx_parameters as inputs
 from cloudify.exceptions import OperationRetry
 from cloudify.exceptions import RecoverableError
 
@@ -200,8 +201,18 @@ def setup_kubernetes_bootstrap_data(start_output):
 def start_kubernetes_master():
     # Start Kubernetes Master
     ctx.logger.info('Attempting to start Kubernetes master.')
-    start_master_command = 'sudo kubeadm init --pod-network-cidr=10.244.0.0/16'
-    start_output = execute_command(start_master_command)
+    init_command = 'sudo kubeadm init'
+    cni_provider = inputs.get('cni-provider-blueprint', 'weave.yaml')
+
+    # Each cni provider work with specific pod-cidr
+    if cni_provider == 'flannel.yaml':
+        init_command = '{0} {1}'.format(init_command,
+                                        '--pod-network-cidr=10.244.0.0/16')
+    elif cni_provider == 'calico.yaml':
+        init_command = '{0} {1}'.format(init_command,
+                                        '--pod-network-cidr=192.168.0.0/16')
+
+    start_output = execute_command(init_command)
     ctx.logger.debug('start_master_command output: {0}'.format(start_output))
     # Check if start succeeded.
     if start_output is False or not isinstance(start_output, basestring):
