@@ -1,0 +1,38 @@
+inputs:
+  image:
+    description: Image to be used when launching agent VMs
+    default: { get_secret: centos_core_image }
+
+  flavor:
+    description: Flavor of the agent VMs
+    default: { get_secret: large_image_flavor }
+
+  agent_user:
+    description: >
+      User for connecting to agent VMs
+    default: centos
+
+  dashboard_ip:
+    default: { get_attribute: [ kubernetes_master_ip, floating_ip_address ] }
+
+  k8s_node_dep_archive:
+    default: https://github.com/rajalokan/kubernetes-node-blueprints/archive/master.zip
+
+  k8s_lb_dep_archive:
+    default: https://github.com/rajalokan/kubernetes-lb-blueprints/archive/master.zip
+
+  public_network_name:
+    type: string
+    default: { get_secret: public_network_name }
+
+  public_subnet_name:
+    type: string
+    default: { get_secret: public_subnet_name }
+
+  router_name:
+    type: string
+    default: { get_secret: router_name }
+
+  kubernetes_security_group_name:
+    type: string
+    default: { get_secret: kubernetes_security_group_name }

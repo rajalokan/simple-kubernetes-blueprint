@@ -14,7 +14,7 @@ node_templates:
             groups: docker
             shell: /bin/bash
             sudo: ['ALL=(ALL) NOPASSWD:ALL']
-            ssh-authorized-keys:
+            ssh_authorized_keys:
               - { get_secret: agent_key_public }
         write_files:
           - path: /etc/yum.repos.d/docker.repo

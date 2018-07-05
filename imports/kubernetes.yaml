@@ -1,7 +1,7 @@
 tosca_definitions_version: cloudify_dsl_1_3
 
 imports:
-  - monitoring.yaml
+#   - monitoring.yaml
   - dashboard.yaml
 
 inputs:
@@ -82,7 +82,7 @@ node_templates:
     # we can start only after set all properties
     - target: k8s_node
       type: cloudify.relationships.depends_on
-    - target: k8s_load
+    - target: k8s_lb
       type: cloudify.relationships.depends_on
 
 
